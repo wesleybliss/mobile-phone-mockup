@@ -2,17 +2,22 @@ import * as fs from 'fs'
 import * as path from 'path'
 import dotenv from 'dotenv'
 
+const __dirname = import.meta.url
+
 export const getEnvironmentVars = () => {
     
     const env = path.resolve(__dirname, '../.env')
     const sampleEnv = path.resolve(__dirname, '../sample.env')
     
     if (process.env.IS_CI) {
+        
         const { parsed } = dotenv.config({ path: sampleEnv })
+        
         return Object.keys(parsed).reduce((acc, it) => ({
             ...acc,
             [it]: process.env[it],
         }), {})
+        
     }
     
     if (!fs.existsSync(env))
